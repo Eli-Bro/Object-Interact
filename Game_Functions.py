@@ -28,6 +28,9 @@ def place_object(dimList, frame, radius, circleColor, prevObjPer=None):
 
 
 def check_hit(landmarks, objPerList, pose_results, frameList, radius):
+    if pose_results.pose_landmarks is None:
+        return False
+
     for ele in landmarks:
         landmarkCenter = [int(pose_results.pose_landmarks.landmark[ele].x * frameList[0]),
                           int(pose_results.pose_landmarks.landmark[ele].y * frameList[1])]

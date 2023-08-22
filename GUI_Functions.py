@@ -20,6 +20,7 @@ global objPers
 global currRadius
 global mirror
 global timeSelected
+global timeBtns
 
 
 #Camera feed functions
@@ -29,7 +30,7 @@ The central driver of the overall program, this function handles starting the vi
 and has several calls to processing functions within it. A recording of numerical data
 can only begin once the camera has been initialized.
 '''
-def initiate_cam(placeholder_img, obj_score, start_object_btn):
+def initiate_cam(placeholder_img, obj_score, start_object_btn, timer_meter):
     # start_object_btn.config(state=tkinter.NORMAL, bg=startButtonColor)
 
     global cam
@@ -60,8 +61,7 @@ def initiate_cam(placeholder_img, obj_score, start_object_btn):
     # Time reference
     start_time = time.time()
 
-    gameStartTime = 0
-    elapsedGameTime = 0
+    gameStartTime = time.time()*10
 
     while cam.isOpened():
         ret, frame = cam.read()
@@ -76,8 +76,9 @@ def initiate_cam(placeholder_img, obj_score, start_object_btn):
 
             # process the frame for pose detection
             pose_results = pose.process(frame)
-            # draw skeleton on the frame
-            mp_drawing.draw_landmarks(frame, pose_results.pose_landmarks, mp_pose.POSE_CONNECTIONS)
+            if pose_results is not None:
+                # draw skeleton on the frame
+                mp_drawing.draw_landmarks(frame, pose_results.pose_landmarks, mp_pose.POSE_CONNECTIONS)
 
             if objectFlag:
                 if newGame: # Checks for a new trail
@@ -91,8 +92,14 @@ def initiate_cam(placeholder_img, obj_score, start_object_btn):
                     frame, objPers = game.place_object(dimList, frame, currRadius, normalCircleColor)
                     prevColor = normalCircleColor
                     if not gameStarted:
+                        for btn in timeBtns:
+                            if btn != timeSelected.get():
+                                timeBtns[btn].configure(state='disabled')
                         gameStarted = True
+                        timer_meter.configure(amounttotal=timeSelected.get(), amountused=timeSelected.get())
                         gameStartTime = time.time()
+                        score = 1
+                        obj_score.config(text=str(score))
                 else: # Keeps the previous circle
                     frame, objPers = game.place_object(dimList, frame,  currRadius, prevColor, prevObjPer=objPers)
                 if game.check_hit(handLandmarks, objPers, pose_results, dimList, currRadius) or \
@@ -105,13 +112,21 @@ def initiate_cam(placeholder_img, obj_score, start_object_btn):
                     objectHit = False
 
                 # Check for time
-                elapsedGameTime += time.time() - gameStartTime
-                print(elapsedGameTime)
-                if int(elapsedGameTime) >= timeSelected.get():
+                elapsedGameTime = time.time() - gameStartTime
+                print('t: ' + str(time.time()))
+                print('gs: ' + str(gameStartTime))
+                timeRemaining = timeSelected.get() - elapsedGameTime
+                print(timeRemaining)
+                if gameStarted:
+                    timer_meter.configure(amountused=int(timeRemaining))
+                else:
+                    timer_meter.configure(amountused=timeSelected.get())
+                if timeRemaining < 0:
                     newGame = True
-                    score = 0
-                    obj_score.config(text=str(score))
-                    elapsedGameTime = 0
+                    gameStartTime = time.time()*10
+                    timer_meter.configure(amountused=0)
+                    for btn in timeBtns:
+                        timeBtns[btn].configure(state='enabled')
 
             # Handle frame times
             newFrameTime = time.time()
@@ -198,11 +213,13 @@ def toggle_mirror(toggleMode):
 Function: select_model
 Allows the user to configure the model they need via a file dialog.
 '''
-def start_object(timeDuration):
+def start_object(timeDuration, timeBtnList):
     global objectFlag
     objectFlag = True
     global timeSelected
     timeSelected = timeDuration
+    global timeBtns
+    timeBtns = timeBtnList
 
 def reset_score():
     global objectFlag

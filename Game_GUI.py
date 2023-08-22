@@ -43,12 +43,14 @@ scoreLabel = ttk.Label(gameInfoFrame, text='---')
 scoreLabel.grid(row=1, column=0)
 
 # Game timer
-# timer = ttk.Floodgauge(gameInfoFrame,
-#                        bootstyle='warning',
-#                        mask='{}%',
-#                        maximum=30)
-# timer.grid(row=2, column=0)
-# timer.start()
+timer = ttk.Meter(gameInfoFrame,
+                  bootstyle='warning',
+                  interactive=False,
+                  metersize=140,
+                  amounttotal=30,
+                  subtext='Time',
+                  subtextstyle='warning')
+timer.grid(row=2, column=0)
 
 ## Object Label Frame
 objectControlFrame = ttk.LabelFrame(win, text='Game Controls')
@@ -90,7 +92,7 @@ time30 = ttk.Radiobutton(objectControlFrame, text='30s', value=30, variable=sele
 time60 = ttk.Radiobutton(objectControlFrame, text='60s', value=60, variable=selected, style='toolbutton')
 time90 = ttk.Radiobutton(objectControlFrame, text='90s', value=90, variable=selected, style='toolbutton')
 
-timeBtns = [time30, time60, time90]
+timeBtns = {30: time30, 60: time60, 90: time90}
 
 time30.grid(row=3, column=0)
 time60.grid(row=3, column=1)
@@ -99,7 +101,7 @@ time90.grid(row=3, column=2)
 # Start Object button
 startObjectButton = ttk.Button(objectControlFrame,
                                text="Start",
-                               command=lambda: gui.start_object(selected))
+                               command=lambda: gui.start_object(selected, timeBtns))
 startObjectButton.grid(row=4, column=0)
 
 resetScoreButton = ttk.Button(objectControlFrame,
@@ -134,7 +136,7 @@ stopFeedButton.grid(row=1, column=1)
 # Start Camera button
 startFeedButton = ttk.Button(cameraControlFrame,
                              text="Start",
-                             command=lambda: gui.initiate_cam(placeholder_img=feed_img, obj_score=scoreLabel, start_object_btn=startObjectButton))
+                             command=lambda: gui.initiate_cam(placeholder_img=feed_img, obj_score=scoreLabel, start_object_btn=startObjectButton, timer_meter=timer))
 startFeedButton.grid(row=1, column=0)
 
 win.mainloop()
