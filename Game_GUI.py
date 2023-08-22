@@ -42,6 +42,14 @@ scoreTitle.grid(row=0, column=0)
 scoreLabel = ttk.Label(gameInfoFrame, text='---')
 scoreLabel.grid(row=1, column=0)
 
+# Score Title
+highScoreTitle = ttk.Label(gameInfoFrame, text='High Score')
+highScoreTitle.grid(row=0, column=1)
+
+# Score Output Label
+highScoreLabel = ttk.Label(gameInfoFrame, text='---')
+highScoreLabel.grid(row=1, column=1)
+
 # Game timer
 timer = ttk.Meter(gameInfoFrame,
                   bootstyle='warning',
@@ -136,7 +144,7 @@ stopFeedButton.grid(row=1, column=1)
 # Start Camera button
 startFeedButton = ttk.Button(cameraControlFrame,
                              text="Start",
-                             command=lambda: gui.initiate_cam(placeholder_img=feed_img, obj_score=scoreLabel, start_object_btn=startObjectButton, timer_meter=timer))
+                             command=lambda: gui.initiate_cam(placeholder_img=feed_img, obj_score=scoreLabel, start_object_btn=startObjectButton, timer_meter=timer, high_score=highScoreLabel))
 startFeedButton.grid(row=1, column=0)
 
 win.mainloop()

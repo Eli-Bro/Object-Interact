@@ -30,7 +30,7 @@ The central driver of the overall program, this function handles starting the vi
 and has several calls to processing functions within it. A recording of numerical data
 can only begin once the camera has been initialized.
 '''
-def initiate_cam(placeholder_img, obj_score, start_object_btn, timer_meter):
+def initiate_cam(placeholder_img, obj_score, start_object_btn, timer_meter, high_score):
     # start_object_btn.config(state=tkinter.NORMAL, bg=startButtonColor)
 
     global cam
@@ -62,6 +62,7 @@ def initiate_cam(placeholder_img, obj_score, start_object_btn, timer_meter):
     start_time = time.time()
 
     gameStartTime = time.time()*10
+    high_score_num = 0
 
     while cam.isOpened():
         ret, frame = cam.read()
@@ -113,15 +114,15 @@ def initiate_cam(placeholder_img, obj_score, start_object_btn, timer_meter):
 
                 # Check for time
                 elapsedGameTime = time.time() - gameStartTime
-                print('t: ' + str(time.time()))
-                print('gs: ' + str(gameStartTime))
                 timeRemaining = timeSelected.get() - elapsedGameTime
-                print(timeRemaining)
                 if gameStarted:
                     timer_meter.configure(amountused=int(timeRemaining))
                 else:
                     timer_meter.configure(amountused=timeSelected.get())
                 if timeRemaining < 0:
+                    if score > high_score_num:
+                        high_score.configure(text=str(score))
+                        high_score_num = score
                     newGame = True
                     gameStartTime = time.time()*10
                     timer_meter.configure(amountused=0)
