@@ -91,7 +91,7 @@ def initiate_cam(placeholder_img, obj_score, start_object_btn):
                     frame, objPers = game.place_object(dimList, frame, currRadius, normalCircleColor)
                     prevColor = normalCircleColor
                     if not gameStarted:
-                        gameStart = True
+                        gameStarted = True
                         gameStartTime = time.time()
                 else: # Keeps the previous circle
                     frame, objPers = game.place_object(dimList, frame,  currRadius, prevColor, prevObjPer=objPers)
@@ -105,13 +105,13 @@ def initiate_cam(placeholder_img, obj_score, start_object_btn):
                     objectHit = False
 
                 # Check for time
-                # elapsedGameTime += time.time() - gameStartTime
-                # print(elapsedGameTime)
-                # if int(elapsedGameTime) >= timeSelected.get():
-                #     newGame = True
-                #     score = 0
-                #     obj_score.config(text=str(score))
-                #     elapsedGameTime = 0
+                elapsedGameTime += time.time() - gameStartTime
+                print(elapsedGameTime)
+                if int(elapsedGameTime) >= timeSelected.get():
+                    newGame = True
+                    score = 0
+                    obj_score.config(text=str(score))
+                    elapsedGameTime = 0
 
             # Handle frame times
             newFrameTime = time.time()
