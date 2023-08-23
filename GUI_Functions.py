@@ -6,12 +6,11 @@ import cv2
 import mediapipe as mp
 from PIL import Image, ImageTk
 
-import Camera_Extraction_Functions as cef
 from GUI_Visual_Resources import *
 import Game_Functions as game
 
 global cam
-global recordFlag
+# global recordFlag
 global startTime
 global frameCap
 global objectFlag
@@ -64,32 +63,32 @@ def initiate_cam(placeholder_img, obj_score, start_object_btn, timer_meter, high
     high_score_num = 0
 
     while cam.isOpened():
-        ret, frame = cam.read()
-        fWidth = frame.shape[1]
-        fHeight = frame.shape[0]
+        ret, pFrame = cam.read()
+        fWidth = pFrame.shape[1]
+        fHeight = pFrame.shape[0]
         dimList = [fWidth, fHeight]
         global currRadius
 
         try:
             #Convert frame to correct color
-            frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            pFrame = cv2.cvtColor(pFrame, cv2.COLOR_BGR2RGB)
 
             # process the frame for pose detection
-            pose_results = pose.process(frame)
+            pose_results = pose.process(pFrame)
             if pose_results is not None:
                 # draw skeleton on the frame
-                mp_drawing.draw_landmarks(frame, pose_results.pose_landmarks, mp_pose.POSE_CONNECTIONS)
+                mp_drawing.draw_landmarks(pFrame, pose_results.pose_landmarks, mp_pose.POSE_CONNECTIONS)
 
             if objectFlag:
-                if newGame: # Checks for a new trail
+                if newGame: # Checks for a new trial
                     objectHit = False
                     score = 0
                     newGame = False
-                    frame, objPers = game.place_object(dimList, frame, currRadius, startCircleColor)
+                    pFrame, objPers = game.place_object(dimList, pFrame, currRadius, startCircleColor)
                     prevColor = startCircleColor
                     gameStarted = False
                 if objectHit: # Checks if new circle needs to be made
-                    frame, objPers = game.place_object(dimList, frame, currRadius, normalCircleColor)
+                    pFrame, objPers = game.place_object(dimList, pFrame, currRadius, normalCircleColor)
                     prevColor = normalCircleColor
                     if not gameStarted:
                         for btn in timeBtns:
@@ -101,7 +100,7 @@ def initiate_cam(placeholder_img, obj_score, start_object_btn, timer_meter, high
                         score = 1
                         obj_score.config(text=str(score))
                 else: # Keeps the previous circle
-                    frame, objPers = game.place_object(dimList, frame,  currRadius, prevColor, prevObjPer=objPers)
+                    pFrame, objPers = game.place_object(dimList, pFrame,  currRadius, prevColor, prevObjPer=objPers)
                 if game.check_hit(handLandmarks, objPers, pose_results, dimList, currRadius) or \
                         game.check_hit(footLandmarks, objPers, pose_results, dimList, currRadius): # Checks for hit
                     pygame.mixer.Channel(1).play(pygame.mixer.Sound(objectHitSound))
@@ -133,15 +132,15 @@ def initiate_cam(placeholder_img, obj_score, start_object_btn, timer_meter, high
             newFrameTime = time.time()
 
             if not mirror:
-                frame = cv2.flip(frame, 1)
+                pFrame = cv2.flip(pFrame, 1)
 
             # Draw all necessary info on frame
-            frame = cef.display_fps(frame, newFrameTime, prevFrameTime)
+            pFrame = game.display_fps(pFrame, newFrameTime, prevFrameTime)
             prevFrameTime = newFrameTime
 
             # Update the image to tkinter
-            frame = cv2.resize(frame, photoDim)
-            img_update = ImageTk.PhotoImage(Image.fromarray(frame))
+            pFrame = cv2.resize(pFrame, photoDim)
+            img_update = ImageTk.PhotoImage(Image.fromarray(pFrame))
             placeholder_img.configure(image=img_update)
             placeholder_img.image = img_update
             placeholder_img.update()
