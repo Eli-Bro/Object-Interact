@@ -96,7 +96,7 @@ mirrorToggle = ttk.Checkbutton(objectControlFrame,
                                command=lambda: gui.toggle_mirror(mirrorToggleMode),
                                variable=mirrorToggleMode,
                                style='round-toggle')
-mirrorToggle.grid(row=4, column=1, columnspan=1, pady=(0, 7))
+mirrorToggle.grid(row=3, column=1, columnspan=1, pady=(0, 7))
 
 # Time selection
 selected = ttk.IntVar()
@@ -107,22 +107,22 @@ time90 = ttk.Radiobutton(objectControlFrame, text='90s', value=90, variable=sele
 
 timeBtns = {30: time30, 60: time60, 90: time90}
 
-time30.grid(row=3, column=0)
-time60.grid(row=3, column=1)
-time90.grid(row=3, column=2)
+time30.grid(row=2, column=0)
+time60.grid(row=2, column=1)
+time90.grid(row=2, column=2)
 
 # Start Object button
 startObjectButton = ttk.Button(objectControlFrame,
                                text="Start",
                                command=lambda: gui.start_object(selected, timeBtns),
                                width=8, style='success')
-startObjectButton.grid(row=4, column=0, sticky='e', pady=(0, 5))
+startObjectButton.grid(row=3, column=0, sticky='e', pady=(0, 5))
 
 resetScoreButton = ttk.Button(objectControlFrame,
                               text="Reset",
                               command=lambda: gui.reset_score(timeBtns),
                               width=8, style='danger')
-resetScoreButton.grid(row=4, column=2, sticky='w', pady=(0, 5))
+resetScoreButton.grid(row=3, column=2, sticky='w', pady=(0, 5))
 
 
 
