@@ -51,7 +51,6 @@ def initiate_cam(placeholder_img, obj_score, start_object_btn, timer_meter, high
     cam = cv2.VideoCapture(0)
     prevFrameTime = 0
     pygame.mixer.init()
-    pygame.mixer.music.load(objectHitSound)
 
     #TODO: Specific frequency set up
     # Set your desired frequency here (in Hz) (Could be in UI)
@@ -105,7 +104,7 @@ def initiate_cam(placeholder_img, obj_score, start_object_btn, timer_meter, high
                     frame, objPers = game.place_object(dimList, frame,  currRadius, prevColor, prevObjPer=objPers)
                 if game.check_hit(handLandmarks, objPers, pose_results, dimList, currRadius) or \
                         game.check_hit(footLandmarks, objPers, pose_results, dimList, currRadius): # Checks for hit
-                    pygame.mixer.music.play(loops=0)
+                    pygame.mixer.Channel(1).play(pygame.mixer.Sound(objectHitSound))
                     score += 1
                     obj_score.config(text=str(score))
                     objectHit = True
@@ -123,6 +122,7 @@ def initiate_cam(placeholder_img, obj_score, start_object_btn, timer_meter, high
                     if score > high_score_num:
                         high_score.configure(text=str(score))
                         high_score_num = score
+                        pygame.mixer.Channel(1).play(pygame.mixer.Sound(highScoreSound))
                     newGame = True
                     gameStartTime = time.time()*10
                     timer_meter.configure(amountused=0)
@@ -222,11 +222,13 @@ def start_object(timeDuration, timeBtnList):
     global timeBtns
     timeBtns = timeBtnList
 
-def reset_score():
+def reset_score(timeBtnList):
     global objectFlag
     objectFlag = False
     global newGame
     newGame = True
+    for btn in timeBtns:
+        timeBtns[btn].configure(state='enabled')
 
 def resize_scale_circle(radius, preview_img, raw_bg):
     global currRadius

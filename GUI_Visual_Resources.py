@@ -3,6 +3,7 @@ prevDim = (220, 220)
 minRad = 15
 maxRad = 50
 objectHitSound = "correct-2-46134.mp3"
+highScoreSound = "goodresult-82807.mp3"
 normalCircleColor = (255, 0, 0)
 startCircleColor = (0, 255, 0)
 

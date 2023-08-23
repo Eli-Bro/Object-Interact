@@ -114,7 +114,7 @@ startObjectButton.grid(row=4, column=0)
 
 resetScoreButton = ttk.Button(objectControlFrame,
                               text="Reset",
-                              command=lambda: gui.reset_score())
+                              command=lambda: gui.reset_score(timeBtns))
 resetScoreButton.grid(row=4, column=1)
 
 
