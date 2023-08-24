@@ -26,7 +26,9 @@ To start playing the game:
 1. Start the camera under ***Camera***
 2. Select the game duration, available in **30**, **60**, or **90** seconds
 3. Select the circle size via the ```slider```
-4. For an extra challenge, turn on the ```mirror toggle``` to flip the image!
+4. Once started, a green circle will appear on the captured video. Hit it and start the game!
+   - Once the game ends, a new green circle will appear.
+5. For an extra challenge, turn on the ```mirror toggle``` to flip the image!
 
 ### Extra Controls
 - The reset button in ***Game Controls*** allows the user to end the current game, but the start button must be clicked again to begin another game.
