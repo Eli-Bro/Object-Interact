@@ -6,7 +6,10 @@ import GUI_Functions as gui
 from GUI_Visual_Resources import *
 
 '''
-Function
+Function: setup_photo_frame
+Takes in the photo to be outputted on the tkinter frame, the frame the photo will go in,
+and the dimensions of the photo. The final output is the label object used to output the photo,
+and the raw photo in array form.
 '''
 def setup_photo_frame(photo, labelFrame, dims):
     im = Image.open(photo)
