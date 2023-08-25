@@ -24,9 +24,9 @@ pip install --upgrade pip --user
 ## How to Use
 To start playing the game:
 1. Run the [Game_GUI.py](https://github.com/Eli-Bro/Object-Interact/blob/Fix/Game_GUI.py) file to start the front panel.
-2. Start the camera under ***Camera***
-3. Select the game duration, available in **30**, **60**, or **90** seconds
-4. Select the circle size via the ```slider```
+2. Start the camera under ***Camera***.
+3. Select the game duration, available in **30**, **60**, or **90** seconds.
+4. Select the circle size via the ```slider```.
 5. Once started, a green circle will appear on the captured video. Hit it and start the game!
    - Once the game ends, a new green circle will appear.
 6. For an extra challenge, turn on the ```mirror toggle``` to flip the image!
